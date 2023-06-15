@@ -2,15 +2,12 @@
 
 A new Flutter project.
 
-## Getting Started
+На данный момент в приложении возможно: добавлять новые задачи, редактировать существующие, отображать все или только невыполненные задачи, удалять/отмечать сделанной задачу с помощью свайпов, также удалять можно из экрана редактирования. Тема приложения меняется вместе с темой устройства.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![ScreenShot](screenshots\Screenshot_1686854804.png)
+![ScreenShot](screenshots\Screenshot_1686854819.png)
+![ScreenShot](screenshots\Screenshot_1686854829.png)
+![ScreenShot](screenshots\Screenshot_1686854870.png)
+![ScreenShot](screenshots\Screenshot_1686854873.png)
+![ScreenShot](screenshots\Screenshot_1686855037.png)
+![ScreenShot](screenshots\Screenshot_1686855043.png)
