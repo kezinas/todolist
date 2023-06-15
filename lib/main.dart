@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/first_screen.dart';
+import 'package:todolist/second_screen.dart';
+import 'themes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,11 +15,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 247, 246, 242)),
-        useMaterial3: true,
-      ),
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
+      themeMode: ThemeMode.system,
+      routes: {
+        '/main': (context) => FirstScreen(),
+        '/editing': (context) => SecondScreen(),
+      },
       home: FirstScreen(),
     );
   }
