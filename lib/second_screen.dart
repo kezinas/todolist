@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'task.dart';
 import 'first_screen.dart';
+import 'db_helper.dart';
 
 class SecondScreen extends StatefulWidget {
   const SecondScreen({super.key});
@@ -42,18 +43,32 @@ class _SecondScreenState extends State<SecondScreen> {
               },
               icon: IconTheme(
                 data: Theme.of(context).copyWith().iconTheme,
-                child: Icon(Icons.close),
+                child: const Icon(Icons.close),
               ),
             ),
             actions: [
               TextButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    if (task.task == '') {
+                      task.task = tsk;
+                      task.importance = importance;
+                      task.dated = dateOn;
+                      task.date = date;
+                      DbHelper.addTask(task);
+                    } else {
+                      task.task = tsk;
+                      task.importance = importance;
+                      task.dated = dateOn;
+                      task.date = date;
+                      DbHelper.updateTask(task);
+                    }
                     addedTask =
                         Task(tsk ?? task.task, importance, dateOn, date);
                     added = true;
+
                     Navigator.pop(context);
                   },
-                  child: Text(
+                  child: const Text(
                     "СОХРАНИТЬ",
                     style: TextStyle(color: Color.fromARGB(255, 0, 122, 255)),
                   )),
@@ -70,7 +85,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 tsk = value;
                 isEmpty = false;
               }),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 hintText: 'Что надо сделать',
@@ -80,10 +95,10 @@ class _SecondScreenState extends State<SecondScreen> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                Text('Важность'),
+                const Text('Важность'),
                 DropdownButton(
                     hint: DropdownMenuItem(
                       child: Text(importance),
@@ -129,17 +144,13 @@ class _SecondScreenState extends State<SecondScreen> {
                 });
               }
             },
-            title: Text('Сделать до'),
+            title: const Text('Сделать до'),
             subtitle: dateOn
                 ? Text(
-                    date.day.toString() +
-                        '.' +
-                        date.month.toString() +
-                        '.' +
-                        date.year.toString(),
-                    style: TextStyle(color: Colors.blue),
+                    '${date.day}.${date.month}.${date.year}',
+                    style: const TextStyle(color: Colors.blue),
                   )
-                : Text(''),
+                : const Text(''),
           ),
           TextButton.icon(
             onPressed: (isEmpty && task.task == '')
@@ -154,6 +165,7 @@ class _SecondScreenState extends State<SecondScreen> {
                       added = false;
                       if (task.task != '') {
                         deleted = true;
+                        DbHelper.deleteTask(task);
                       }
                       Navigator.pop(context);
                     });
@@ -162,8 +174,6 @@ class _SecondScreenState extends State<SecondScreen> {
               Icons.delete,
               color: (isEmpty && task.task == '') ? Colors.grey : Colors.red,
             ),
-            //disabledColor: Colors.grey,
-            //color: Colors.red,
             label: Text(
               'УДАЛИТЬ',
               style: TextStyle(
