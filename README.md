@@ -6,6 +6,8 @@ A new Flutter project.
 
 Добавлено: хранение информации на диске, локализация, flutter_lints
 
+![ScreenShot](screenshots/Screenshot_1687583346.png)
+![ScreenShot](screenshots/Screenshot_1687583356.png)
 ![ScreenShot](screenshots/Screenshot_1686854804.png)
 ![ScreenShot](screenshots/Screenshot_1686854819.png)
 ![ScreenShot](screenshots/Screenshot_1686854829.png)

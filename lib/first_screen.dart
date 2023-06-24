@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'task.dart';
 import 'db_helper.dart';
-//import 'generated/l10n.dart';
+import 'generated/l10n.dart';
 //import 'package:flutter_localizations/flutter_localizations.dart';
 
 class FirstScreen extends StatefulWidget {
@@ -10,10 +10,6 @@ class FirstScreen extends StatefulWidget {
   @override
   State<FirstScreen> createState() => _FirstScreenState();
 }
-
-late Task addedTask;
-late bool added;
-late bool deleted;
 
 class _FirstScreenState extends State<FirstScreen> {
   List<Task> data = [];
@@ -24,7 +20,8 @@ class _FirstScreenState extends State<FirstScreen> {
   late List<String> visibleTasks = alltasks.keys.toList();
   @override
   Widget build(BuildContext context) {
-    //final delegate = S.of(context);
+    final delegate = S.of(context);
+    //delegate.load(Locale('en'));
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 0, 122, 255),
@@ -52,12 +49,12 @@ class _FirstScreenState extends State<FirstScreen> {
           SliverAppBar(
             title: Column(
               children: [
-                const Text(
-                  "Мои дела",
+                Text(
+                  delegate.Title,
                   style: TextStyle(fontSize: 32),
                 ),
                 Text(
-                  'Выполнено - $countDone',
+                  '${delegate.Subtitle} $countDone',
                   style: const TextStyle(
                       color: Color.fromARGB(255, 142, 142, 147)),
                 ),

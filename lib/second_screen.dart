@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'task.dart';
-import 'first_screen.dart';
 import 'db_helper.dart';
+import 'generated/l10n.dart';
 
 class SecondScreen extends StatefulWidget {
   const SecondScreen({super.key});
@@ -15,17 +15,18 @@ class _SecondScreenState extends State<SecondScreen> {
   bool dateOn = false;
   DateTime date = DateTime.now();
   bool isEmpty = true;
-  var items = ['Нет', 'Низкий', 'Высокий'];
   String importance = "Нет";
   bool changing = false;
   bool isChanged = false;
   @override
   Widget build(BuildContext context) {
     Task task = ModalRoute.of(context)?.settings.arguments as Task;
+    final delegate = S.of(context);
+    var items = [delegate.Not, delegate.Low, delegate.High];
     if (task.task != '' && !isChanged) {
       changing = true;
       isChanged = true;
-      importance = task.importance ?? "Нет";
+      importance = task.importance ?? delegate.Not;
       dateOn = task.dated;
       if (dateOn) {
         date = task.date;
@@ -37,8 +38,6 @@ class _SecondScreenState extends State<SecondScreen> {
           AppBar(
             leading: IconButton(
               onPressed: () {
-                deleted = false;
-                added = false;
                 Navigator.pop(context);
               },
               icon: IconTheme(
@@ -62,15 +61,12 @@ class _SecondScreenState extends State<SecondScreen> {
                       task.date = date;
                       DbHelper.updateTask(task);
                     }
-                    addedTask =
-                        Task(tsk ?? task.task, importance, dateOn, date);
-                    added = true;
-
                     Navigator.pop(context);
                   },
-                  child: const Text(
-                    "СОХРАНИТЬ",
-                    style: TextStyle(color: Color.fromARGB(255, 0, 122, 255)),
+                  child: Text(
+                    delegate.SaveButton,
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 0, 122, 255)),
                   )),
             ],
           ),
@@ -85,10 +81,10 @@ class _SecondScreenState extends State<SecondScreen> {
                 tsk = value;
                 isEmpty = false;
               }),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))),
-                hintText: 'Что надо сделать',
+                hintText: delegate.Hint,
                 fillColor: Colors.white,
               ),
             ),
@@ -98,7 +94,7 @@ class _SecondScreenState extends State<SecondScreen> {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                const Text('Важность'),
+                Text(delegate.DropDown),
                 DropdownButton(
                     hint: DropdownMenuItem(
                       child: Text(importance),
@@ -111,7 +107,7 @@ class _SecondScreenState extends State<SecondScreen> {
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        importance = value ?? "none";
+                        importance = value ?? delegate.Not;
                       });
                     }),
               ],
@@ -144,7 +140,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 });
               }
             },
-            title: const Text('Сделать до'),
+            title: Text(delegate.Date),
             subtitle: dateOn
                 ? Text(
                     '${date.day}.${date.month}.${date.year}',
@@ -162,9 +158,7 @@ class _SecondScreenState extends State<SecondScreen> {
                       isEmpty = true;
                       tsk = '';
                       date = DateTime.now();
-                      added = false;
                       if (task.task != '') {
-                        deleted = true;
                         DbHelper.deleteTask(task);
                       }
                       Navigator.pop(context);
@@ -175,7 +169,7 @@ class _SecondScreenState extends State<SecondScreen> {
               color: (isEmpty && task.task == '') ? Colors.grey : Colors.red,
             ),
             label: Text(
-              'УДАЛИТЬ',
+              delegate.DeleteButton,
               style: TextStyle(
                   color:
                       (isEmpty && task.task == '') ? Colors.grey : Colors.red),
