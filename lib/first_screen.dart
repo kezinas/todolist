@@ -89,6 +89,7 @@ class _FirstScreenState extends State<FirstScreen> {
               future: DbHelper.getAllTasks(),
               builder: (context, snapshot) {
                 data = snapshot.data ?? [];
+                print('data len = ${data.length}');
                 if (snapshot.hasData && snapshot.data != null) {
                   alltasks = {for (Task v in data) v.task ?? '': v};
                   if (isVisible) {
@@ -104,6 +105,7 @@ class _FirstScreenState extends State<FirstScreen> {
                   }
                 }
                 if (snapshot.hasError) {
+                  print(data.length);
                   return Text('Error: ${snapshot.error}');
                 } else {
                   return SliverList.builder(
@@ -138,14 +140,15 @@ class _FirstScreenState extends State<FirstScreen> {
                               DbHelper.updateTask(alltasks[visibleTasks[i]]!);
                               return false;
                             } else {
-                              setState(() {
-                                if (alltasks[visibleTasks[i]]!.done == true) {
-                                  countDone -= 1;
-                                }
-                                DbHelper.deleteTask(alltasks[visibleTasks[i]]!);
-                                alltasks.remove(visibleTasks[i]);
-                                visibleTasks.removeAt(i);
-                              });
+                              if (alltasks[visibleTasks[i]]!.done == true) {
+                                countDone -= 1;
+                              }
+                              var tsk = alltasks[visibleTasks[i]];
+                              alltasks.remove(visibleTasks[i]);
+                              visibleTasks.removeAt(i);
+                              print(visibleTasks.length);
+                              DbHelper.deleteTask(tsk!);
+                              setState(() {});
                               return true;
                             }
                           },
@@ -187,22 +190,8 @@ class _FirstScreenState extends State<FirstScreen> {
                               onPressed: () async {
                                 await Navigator.pushNamed(context, '/editing',
                                     arguments: alltasks[visibleTasks[i]]);
-                                /*if (added) {
-                          setState(() {
-                            alltasks.remove(visibleTasks[i]);
-                            visibleTasks.removeAt(i);
-                            alltasks[addedTask.task!] = addedTask;
-                            visibleTasks.add(addedTask.task ?? '');
-                            added = false;
-                          });
-                        }
-                        if (deleted) {
-                          setState(() {
-                            alltasks.remove(visibleTasks[i]);
-                            visibleTasks.removeAt(i);
-                          });
-                        }*/
                                 data = await DbHelper.getAllTasks() ?? [];
+                                print('smth ${data.length}');
                                 setState(() {});
                               },
                               icon: const Icon(

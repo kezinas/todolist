@@ -9,12 +9,14 @@ class DbHelper {
   static Future<Database> getDb() async {
     return openDatabase(join(await getDatabasesPath(), dbName),
         onCreate: (db, version) async => await db.execute(
-            'CREATE TABLE Tasks(id TEXT NOT NULL, text TEXT NOT NULL, importance TEXT NOT NULL, deadline TEXT, done TEXT NOT NULL);'),
+            'CREATE TABLE Tasks(id TEXT NOT NULL, text TEXT NOT NULL, importance TEXT NOT NULL, deadline TEXT, done TEXT NOT NULL, createdAt TEXT NOT NULL, changedAt TEXT NOT NULL, lastUpdatedBy TEXT NOT NULL);'),
         version: ver);
   }
 
   static Future<int> addTask(Task task) async {
     final db = await getDb();
+    print(
+        '${task.id} ${task.task} ${task.strDate()} ${task.importance ?? ' '} ${task.lastUpdatedBy}');
     return await db.insert('Tasks', task.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
@@ -29,6 +31,8 @@ class DbHelper {
 
   static Future<int> deleteTask(Task task) async {
     final db = await getDb();
+    print(
+        '${task.id} ${task.task} ${task.strDate()} ${task.importance ?? ' '}');
     return await db.delete('Tasks', where: 'id = ?', whereArgs: [task.id]);
   }
 

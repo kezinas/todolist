@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'task.dart';
 import 'db_helper.dart';
 import 'generated/l10n.dart';
+import 'back.dart';
 
 class SecondScreen extends StatefulWidget {
   const SecondScreen({super.key});
@@ -15,9 +16,10 @@ class _SecondScreenState extends State<SecondScreen> {
   bool dateOn = false;
   DateTime date = DateTime.now();
   bool isEmpty = true;
-  String importance = "Нет";
+  late String importance;
   bool changing = false;
   bool isChanged = false;
+  Ftasks fhelper = Ftasks();
   @override
   Widget build(BuildContext context) {
     Task task = ModalRoute.of(context)?.settings.arguments as Task;
@@ -31,6 +33,8 @@ class _SecondScreenState extends State<SecondScreen> {
       if (dateOn) {
         date = task.date;
       }
+    } else {
+      importance = delegate.Not;
     }
     return Scaffold(
       body: ListView(
@@ -53,12 +57,20 @@ class _SecondScreenState extends State<SecondScreen> {
                       task.importance = importance;
                       task.dated = dateOn;
                       task.date = date;
+                      task.createdAt = DateTime.now();
+                      task.changedAt = DateTime.now();
+                      task.lastUpdatedBy = (await getId())!;
+                      fhelper.addTask(task);
                       DbHelper.addTask(task);
                     } else {
-                      task.task = tsk;
+                      task.task = tsk ?? task.task;
                       task.importance = importance;
                       task.dated = dateOn;
                       task.date = date;
+                      task.changedAt = DateTime.now();
+                      task.lastUpdatedBy = (await getId())!;
+                      print(
+                          '${task.id} ${task.task} ${task.dated} ${task.strDate()} ${task.importance ?? ' '}');
                       DbHelper.updateTask(task);
                     }
                     Navigator.pop(context);
@@ -149,21 +161,14 @@ class _SecondScreenState extends State<SecondScreen> {
                 : const Text(''),
           ),
           TextButton.icon(
-            onPressed: (isEmpty && task.task == '')
-                ? null
-                : () {
-                    setState(() {
-                      dateOn = false;
-                      importance = items[0];
-                      isEmpty = true;
-                      tsk = '';
-                      date = DateTime.now();
-                      if (task.task != '') {
-                        DbHelper.deleteTask(task);
-                      }
-                      Navigator.pop(context);
-                    });
-                  },
+            onPressed: () async {
+              if (task.task != '') {
+                print(
+                    '${task.id} ${task.task} ${task.strDate()} ${task.importance ?? ' '}');
+                DbHelper.deleteTask(task);
+              }
+              Navigator.pop(context);
+            },
             icon: Icon(
               Icons.delete,
               color: (isEmpty && task.task == '') ? Colors.grey : Colors.red,
