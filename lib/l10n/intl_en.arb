@@ -1,0 +1,12 @@
+{
+    "Title": "My tasks",
+    "Subtitle": "Done -",
+    "Hint": "What to do",
+    "SaveButton": "SAVE",
+    "DeleteButton": "DELETE",
+    "DropDown": "Importance",
+    "Not": "Not",
+    "Low": "Low",
+    "High": "High",
+    "Date": "Finish until"
+}

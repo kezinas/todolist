@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/first_screen.dart';
+import 'package:todolist/second_screen.dart';
+import 'themes.dart';
+import 'generated/l10n.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,12 +17,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 247, 246, 242)),
-        useMaterial3: true,
-      ),
-      home: FirstScreen(),
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
+      themeMode: ThemeMode.system,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      routes: {
+        '/main': (context) => const FirstScreen(),
+        '/editing': (context) => const SecondScreen(),
+      },
+      home: const FirstScreen(),
     );
   }
 }
